@@ -3,13 +3,13 @@ import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBDLeYiUvS6npWNAIbHd5TjgdO4XWcD1HE",
-  authDomain: "starter-react-firebase.firebaseapp.com",
-  projectId: "starter-react-firebase",
-  storageBucket: "starter-react-firebase.appspot.com",
-  messagingSenderId: "760158541798",
-  appId: "1:760158541798:web:d6807a1e33df4e50172827",
-  measurementId: "G-HK3VQQZFEJ",
+  apiKey: "AIzaSyCycpvYeWyHCAdWMmfy0lYX3_8NgADwF90",
+  authDomain: "random-forest-e7140.firebaseapp.com",
+  projectId: "random-forest-e7140",
+  storageBucket: "random-forest-e7140.appspot.com",
+  messagingSenderId: "351872448192",
+  appId: "1:351872448192:web:10e8355653e8ef84601f25",
+  measurementId: "G-95ZMZ17HLS",
 };
 
 // Inisialisasi Firebase

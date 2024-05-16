@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 const WmaCalculator = () => {
-  const [n, setN] = useState(3); // Number of WMA periods
+  const [n, setN] = useState(3);
 
   const [data, setData] = useState([
     { month: "January", week: 1, "Jumlah Terjual": 1000 },

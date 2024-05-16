@@ -15,11 +15,11 @@ import { db } from "../firebase/firebase";
 
 const salesRef = collection(db, "sales");
 
-// Create operation with foreign key reference to alkes
-export async function createSale(data, alkesId) {
+// Create operation with foreign key reference to drugs
+export async function createSale(data, drugsId) {
   try {
-    // Add the alkes ID or reference to the sale data
-    const saleData = { ...data, alkesId, createdAt: new Date().toISOString() }; // Assuming alkesId is the field name for the foreign key
+    // Add the drugs ID or reference to the sale data
+    const saleData = { ...data, drugsId, createdAt: new Date().toISOString() }; // Assuming drugsId is the field name for the foreign key
 
     // Add a new document to the 'sales' collection with the modified data
     const docRef = await addDoc(salesRef, saleData);
@@ -66,17 +66,17 @@ export async function getSaleById(id) {
   }
 }
 
-// Read operation: Get sales by alkes ID
-export async function getSalesByAlkesId(alkesId) {
+// Read operation: Get sales by drugs ID
+export async function getSalesByDrugsId(drugsId) {
   try {
-    const salesQuery = query(salesRef, where("alkesId", "==", alkesId));
+    const salesQuery = query(salesRef, where("drugsId", "==", drugsId)); // Updated field name
     const snapshot = await getDocs(salesQuery);
     const sales = [];
     snapshot.forEach((doc) => {
       sales.push({ id: doc.id, ...doc.data() });
     });
 
-    //sort by createdAt
+    // Sort by createdAt
     const sortedSales = sales.sort((a, b) => {
       return new Date(b.createdAt) - new Date(a.createdAt);
     });

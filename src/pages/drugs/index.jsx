@@ -2,14 +2,14 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Layout from "../../layout";
 import Modal from "../../components/modal/modal";
-import FormCreateAlkes from "../../components/form/form-create-alkes";
-import FormUpdateAlkes from "../../components/form/form-update-alkes";
-import FormDeleteAlkes from "../../components/form/form-delete-alkes";
-import { getAllAlkes } from "../../service/alkes";
+import FormCreateDrugs from "../../components/form/form-create-drugs";
+import FormUpdateDrugs from "../../components/form/form-update-drugs";
+import FormDeleteDrugs from "../../components/form/form-delete-drugs";
+import { getAllDrugs } from "../../service/drugs"; // Updated import
 
 const PAGE_SIZE = 5;
 
-const Alkes = () => {
+const Drugs = () => {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isModalCreate, setIsModalCreate] = useState(false);
@@ -19,17 +19,17 @@ const Alkes = () => {
   const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
-    fetchAlkes();
-  }, [currentPage]); // Trigger fetchAlkes on page change
+    fetchDrugs(); // Updated function call
+  }, [currentPage]); // Trigger fetchDrugs on page change
 
-  const fetchAlkes = async () => {
+  const fetchDrugs = async () => {
     setIsLoading(true);
     try {
-      const response = await getAllAlkes();
-      setData(response.alkes);
+      const response = await getAllDrugs(); // Updated function call
+      setData(response.drugs);
       setIsLoading(false);
     } catch (error) {
-      console.error("Error fetching Alkes:", error);
+      console.error("Error fetching Drugs:", error);
       setIsLoading(false);
     }
   };
@@ -53,12 +53,12 @@ const Alkes = () => {
     <Layout>
       {isModalCreate && (
         <Modal
-          title="Tambah Alkes"
+          title="Tambah Obat"
           setOpenModal={setIsModalCreate}
           children={
-            <FormCreateAlkes
+            <FormCreateDrugs
               setOpenModal={setIsModalCreate}
-              fetchData={fetchAlkes}
+              fetchData={fetchDrugs}
             />
           }
         />
@@ -66,14 +66,14 @@ const Alkes = () => {
 
       {isModalUpdate && (
         <Modal
-          title="Edit Alkes"
+          title="Edit Obat"
           setOpenModal={setIsModalUpdate}
           children={
-            <FormUpdateAlkes
+            <FormUpdateDrugs
               id={id}
               setOpenModal={setIsModalUpdate}
               data={data}
-              fetchData={fetchAlkes}
+              fetchData={fetchDrugs}
             />
           }
         />
@@ -81,19 +81,19 @@ const Alkes = () => {
 
       {isModalDelete && (
         <Modal
-          title="Hapus Alkes"
+          title="Hapus Obat"
           setOpenModal={setIsModalDelete}
           children={
-            <FormDeleteAlkes
+            <FormDeleteDrugs
               setOpenModal={setIsModalDelete}
-              fetchData={fetchAlkes}
+              fetchData={fetchDrugs}
               id={id}
             />
           }
         />
       )}
 
-      <h1 className="mb-8 text-3xl font-bold">Data Alkes</h1>
+      <h1 className="mb-8 text-3xl font-bold">Data Obat</h1>
       <>
         <div className="flex items-center justify-end mb-8">
           <button
@@ -118,16 +118,16 @@ const Alkes = () => {
                   <td colSpan="3">Loading...</td>
                 </tr>
               ) : (
-                currentData.map((alkesItem, index) => (
-                  <tr key={alkesItem.id}>
+                currentData.map((drugItem, index) => (
+                  <tr key={drugItem.id}>
                     <th>{startIndex + index + 1}</th>
 
-                    <td className="font-semibold">{alkesItem.name}</td>
+                    <td className="font-semibold">{drugItem.name}</td>
                     <td className="flex items-center justify-center space-x-4">
                       <button
                         className="btn btn-error"
                         onClick={() => {
-                          setId(alkesItem.id);
+                          setId(drugItem.id);
                           setIsModalDelete(true);
                         }}
                       >
@@ -135,14 +135,14 @@ const Alkes = () => {
                       </button>
                       <button
                         onClick={() => {
-                          setId(alkesItem.id);
+                          setId(drugItem.id);
                           setIsModalUpdate(true);
                         }}
                         className="btn btn-primary"
                       >
                         Edit
                       </button>
-                      <Link to={`/alkes/${alkesItem.id}`} className="btn">
+                      <Link to={`/drugs/${drugItem.id}`} className="btn">
                         Detail
                       </Link>
                     </td>
@@ -199,4 +199,4 @@ const Alkes = () => {
   );
 };
 
-export default Alkes;
+export default Drugs;

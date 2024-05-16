@@ -41,10 +41,12 @@ const Layout = ({ children }) => {
 
   return (
     <>
-      <Sidebar />
-      <main className="w-full p-10 md:w-[calc(100%-256px)] md:ml-64 bg-gray-50 min-h-screen transition-all">
-        {children}
-      </main>
+      <div className="flex">
+        <Sidebar />
+        <main className="relative w-full h-full p-10 overflow-y-auto bg-gray-50 dark:bg-gray-900 lg:ml-64">
+          {children}
+        </main>
+      </div>
     </>
   );
 };

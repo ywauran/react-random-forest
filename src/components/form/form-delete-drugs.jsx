@@ -1,18 +1,19 @@
 import React from "react";
 import Loading from "../loading";
 import { useState } from "react";
-import { deleteAlkes } from "../../service/alkes";
+import { deleteDrugs } from "../../service/drugs"; // Updated import
 
-const FormDeleteAlkes = ({ setOpenModal, id, fetchData }) => {
+const FormDeleteDrugs = ({ setOpenModal, id, fetchData }) => {
+  // Updated component name
   const [isLoading, setLoading] = useState(false);
   const handleDelete = async () => {
     setLoading(true);
     try {
-      await deleteAlkes(id);
+      await deleteDrugs(id); // Updated function call
       fetchData();
       setOpenModal(false);
     } catch (error) {
-      console.error("Error deleting Alkes:", error.message);
+      console.error("Error deleting Drugs:", error.message); // Updated error message
       setLoading(false);
     }
   };
@@ -37,4 +38,4 @@ const FormDeleteAlkes = ({ setOpenModal, id, fetchData }) => {
   );
 };
 
-export default FormDeleteAlkes;
+export default FormDeleteDrugs; // Updated export

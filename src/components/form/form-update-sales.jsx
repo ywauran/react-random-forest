@@ -5,6 +5,7 @@ import Loading from "../loading";
 const FormUpdateSale = ({ fetchData, setOpenModal, id }) => {
   const [newSale, setNewSale] = useState({
     salesAmount: 0,
+    isDiscount: false,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   });
@@ -26,10 +27,12 @@ const FormUpdateSale = ({ fetchData, setOpenModal, id }) => {
   }, [id]);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, type, checked } = e.target;
+    const newValue = type === "checkbox" ? checked : value;
+
     setNewSale((prevSale) => ({
       ...prevSale,
-      [name]: value,
+      [name]: name === "isDiscount" ? newValue === "true" : newValue,
       updatedAt: new Date().toISOString(),
     }));
   };
@@ -46,6 +49,7 @@ const FormUpdateSale = ({ fetchData, setOpenModal, id }) => {
       setIsLoading(false);
     }
   };
+
   return (
     <>
       <div>
@@ -60,6 +64,21 @@ const FormUpdateSale = ({ fetchData, setOpenModal, id }) => {
           value={newSale.salesAmount}
           onChange={handleChange}
         />
+      </div>
+      <div>
+        <label htmlFor="isDiscount" className="label">
+          Diskon
+        </label>
+        <select
+          name="isDiscount"
+          id="isDiscount"
+          className="w-full input input-bordered"
+          value={newSale.isDiscount.toString()}
+          onChange={handleChange}
+        >
+          <option value="false">Tidak</option>
+          <option value="true">Ya</option>
+        </select>
       </div>
       <div className="flex justify-end pt-2 space-x-4">
         <button onClick={() => setOpenModal(false)} className="w-16 btn">

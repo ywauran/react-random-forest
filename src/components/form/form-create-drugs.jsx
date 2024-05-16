@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { createAlkes } from "../../service/alkes";
+import { createDrugs } from "../../service/drugs"; // Assuming you have a createDrugs service function
 import Loading from "../loading";
 
-const FormCreateAlkes = ({ fetchData, setOpenModal }) => {
-  const [newAlkes, setNewAlkes] = useState({
+const FormCreateDrugs = ({ fetchData, setOpenModal }) => {
+  const [newDrug, setNewDrug] = useState({
     name: "",
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -12,8 +12,8 @@ const FormCreateAlkes = ({ fetchData, setOpenModal }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setNewAlkes((prevAlkes) => ({
-      ...prevAlkes,
+    setNewDrug((prevDrug) => ({
+      ...prevDrug,
       [name]: value,
       updatedAt: new Date().toISOString(),
     }));
@@ -22,12 +22,12 @@ const FormCreateAlkes = ({ fetchData, setOpenModal }) => {
   const handleCreate = async () => {
     setLoading(true);
     try {
-      const createdAlkes = await createAlkes(newAlkes);
+      const createdDrug = await createDrugs(newDrug);
       fetchData();
       setOpenModal(false);
       setLoading(false);
     } catch (error) {
-      console.error("Error creating Alkes:", error.message);
+      console.error("Error creating Drugs:", error.message);
       setLoading(false);
     }
   };
@@ -36,14 +36,14 @@ const FormCreateAlkes = ({ fetchData, setOpenModal }) => {
     <>
       <div>
         <label htmlFor="name" className="label">
-          Nama Alat Kesehatan
+          Nama Obat
         </label>
         <input
           type="text"
           name="name"
           id="name"
           className="w-full input input-bordered"
-          value={newAlkes.name}
+          value={newDrug.name}
           onChange={handleChange}
         />
       </div>
@@ -63,4 +63,4 @@ const FormCreateAlkes = ({ fetchData, setOpenModal }) => {
   );
 };
 
-export default FormCreateAlkes;
+export default FormCreateDrugs;

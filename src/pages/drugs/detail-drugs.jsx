@@ -1,14 +1,14 @@
 import Layout from "../../layout";
 import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
-import { getSalesByAlkesId } from "../../service/sales";
-import { getAlkesById } from "../../service/alkes";
+import { getSalesByDrugsId } from "../../service/sales";
+import { getDrugsById } from "../../service/drugs";
 import Modal from "../../components/modal/modal";
 import FormCreateSales from "../../components/form/form-create-sales";
 import FormUpdateSales from "../../components/form/form-update-sales";
 import FormDeleteSales from "../../components/form/form-delete-sales";
 
-const DetailAlkes = () => {
+const DetailDrugs = () => {
   const { id } = useParams();
   const [isModalCreate, setIsModalCreate] = useState(false);
   const [isModalUpdate, setIsModalUpdate] = useState(false);
@@ -21,7 +21,7 @@ const DetailAlkes = () => {
 
   const fetchAlkes = async () => {
     try {
-      const alkes = await getAlkesById(id);
+      const alkes = await getDrugsById(id);
       setAlkes(alkes);
     } catch (error) {
       console.error("Error fetching alkes:", error);
@@ -30,7 +30,8 @@ const DetailAlkes = () => {
 
   const fetchSalesByAlkesId = async () => {
     try {
-      const sales = await getSalesByAlkesId(id);
+      const sales = await getSalesByDrugsId(id);
+      console.log(sales);
       setSales(sales);
     } catch (error) {
       console.error("Error fetching sales:", error);
@@ -108,7 +109,7 @@ const DetailAlkes = () => {
           Tambah
         </button>
         {sales.length > 3 && (
-          <Link to={`/alkes/calculate/${id}`} className="btn">
+          <Link to={`/drugs/calculate/${id}`} className="btn">
             Lihat Perhitungan
           </Link>
         )}
@@ -118,6 +119,7 @@ const DetailAlkes = () => {
           <thead>
             <tr>
               <th>No</th>
+              <th>Diskon</th>
               <th>Penjualan</th>
               <th>Aksi</th>
             </tr>
@@ -126,6 +128,7 @@ const DetailAlkes = () => {
             {currentSales.map((sale, index) => (
               <tr key={sale.id}>
                 <th>{startIndex + index + 1}</th>
+                <td>{sale.isDiscount ? "Ya" : "Tidak"}</td>
                 <td>{sale.salesAmount}</td>
                 <td className="flex items-center justify-center space-x-4">
                   <button
@@ -198,4 +201,4 @@ const DetailAlkes = () => {
   );
 };
 
-export default DetailAlkes;
+export default DetailDrugs;

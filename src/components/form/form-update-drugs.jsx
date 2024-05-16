@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { updateAlkes, getAlkesById } from "../../service/alkes";
+import { updateDrugs, getDrugsById } from "../../service/drugs"; // Updated import
 import Loading from "../loading";
 
-const FormUpdateAlkes = ({ fetchData, setOpenModal, id }) => {
-  const [newAlkes, setNewAlkes] = useState({
+const FormUpdateDrugs = ({ fetchData, setOpenModal, id }) => {
+  // Updated component name
+  const [newDrug, setNewDrug] = useState({
+    // Updated state variable name
     name: "",
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -12,37 +14,38 @@ const FormUpdateAlkes = ({ fetchData, setOpenModal, id }) => {
 
   useEffect(() => {
     if (id) {
-      fetchAlkesById(id);
+      fetchDrugById(id); // Updated function call
     }
   }, [id]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setNewAlkes((prevAlkes) => ({
-      ...prevAlkes,
+    setNewDrug((prevDrug) => ({
+      // Updated state variable name
+      ...prevDrug,
       [name]: value,
       updatedAt: new Date().toISOString(),
     }));
   };
 
-  const fetchAlkesById = async (id) => {
+  const fetchDrugById = async (id) => {
     try {
-      const alkes = await getAlkesById(id);
-      setNewAlkes(alkes);
+      const drug = await getDrugsById(id); // Updated function call
+      setNewDrug(drug); // Updated state variable name
     } catch (error) {
-      console.error("Error fetching Alkes:", error.message);
+      console.error("Error fetching Drugs:", error.message); // Updated error message
     }
   };
 
   const handleUpdate = async () => {
     setIsLoading(true);
     try {
-      await updateAlkes(id, newAlkes);
+      await updateDrugs(id, newDrug); // Updated function call
       fetchData();
       setIsLoading(false);
       setOpenModal(false);
     } catch (error) {
-      console.error("Error updating Alkes:", error.message);
+      console.error("Error updating Drugs:", error.message); // Updated error message
       setIsLoading(false);
     }
   };
@@ -51,14 +54,14 @@ const FormUpdateAlkes = ({ fetchData, setOpenModal, id }) => {
     <>
       <div>
         <label htmlFor="name" className="label">
-          Nama Alat Kesehatan
+          Nama Obat
         </label>
         <input
           type="text"
           name="name"
           id="name"
           className="w-full input input-bordered"
-          value={newAlkes.name}
+          value={newDrug.name} // Updated state variable name
           onChange={handleChange}
         />
       </div>
@@ -78,4 +81,4 @@ const FormUpdateAlkes = ({ fetchData, setOpenModal, id }) => {
   );
 };
 
-export default FormUpdateAlkes;
+export default FormUpdateDrugs; // Updated export

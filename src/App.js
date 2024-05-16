@@ -1,11 +1,11 @@
+import React from "react";
 import Login from "./components/auth/login";
-import Dashboard from "./pages/dashboard";
 import { AuthProvider } from "./contexts/authContext";
 import { useRoutes } from "react-router-dom";
 import NotFound from "./pages/404";
-import Alkes from "./pages/alkes";
-import DetailAlkes from "./pages/alkes/detail-alkes";
-import CalculateAlkes from "./pages/alkes/calculate-alkes";
+import Drugs from "./pages/drugs";
+import DetailDrugs from "./pages/drugs/detail-drugs";
+import CalculateDrugs from "./pages/drugs/calculate-drugs";
 
 function App() {
   const routesArray = [
@@ -18,22 +18,22 @@ function App() {
       element: <Login />,
     },
     {
-      path: "/alkes",
-      element: <Alkes />,
+      path: "/drugs",
+      element: <Drugs />,
     },
     {
-      path: "/alkes/:id",
-      element: <DetailAlkes />,
+      path: "/drugs/:id",
+      element: <DetailDrugs />,
     },
     {
-      path: "/alkes/calculate/:id",
-      element: <CalculateAlkes />,
+      path: "/drugs/calculate/:id",
+      element: <CalculateDrugs />,
     },
   ];
   let routesElement = useRoutes(routesArray);
   return (
     <AuthProvider>
-      <div className="flex flex-col w-full h-screen">{routesElement}</div>
+      <React.Fragment>{routesElement}</React.Fragment>
     </AuthProvider>
   );
 }
