@@ -7,6 +7,7 @@ import ToastNotification from "../toast/toast-notification";
 const FormCreateSales = ({ fetchData, setOpenModal, id }) => {
   const [newSale, setNewSale] = useState({
     salesAmount: 0,
+    stock: 0,
     isDiscount: false,
     updatedAt: new Date().toISOString(),
   });
@@ -39,20 +40,6 @@ const FormCreateSales = ({ fetchData, setOpenModal, id }) => {
   return (
     <>
       <div>
-        <label htmlFor="salesAmount" className="label">
-          Penjualan
-        </label>
-        <TextInput
-          type="number"
-          name="salesAmount"
-          id="salesAmount"
-          className="w-full input input-bordered"
-          value={newSale.salesAmount}
-          onChange={handleChange}
-          min={0}
-        />
-      </div>
-      <div>
         <label htmlFor="isDiscount" className="label">
           Diskon
         </label>
@@ -67,6 +54,38 @@ const FormCreateSales = ({ fetchData, setOpenModal, id }) => {
           <option value="true">Ya</option>
         </Select>
       </div>
+
+      <div>
+        <label htmlFor="stock" className="label">
+          Stok Tersedia
+        </label>
+
+        <TextInput
+          type="number"
+          name="stock"
+          id="stock"
+          className="w-full input input-bordered"
+          value={newSale.stock}
+          onChange={handleChange}
+          min={0}
+        />
+      </div>
+      <div>
+        <label htmlFor="salesAmount" className="label">
+          Penjualan
+        </label>
+
+        <TextInput
+          type="number"
+          name="salesAmount"
+          id="salesAmount"
+          className="w-full input input-bordered"
+          value={newSale.salesAmount}
+          onChange={handleChange}
+          min={0}
+        />
+      </div>
+
       <div className="flex justify-end pt-2 space-x-4">
         <Button color={"gray"} onClick={() => setOpenModal(false)}>
           Tidak

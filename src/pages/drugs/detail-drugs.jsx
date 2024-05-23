@@ -123,40 +123,50 @@ const DetailDrugs = () => {
             <Table.HeadCell>Aksi</Table.HeadCell>
           </Table.Head>
           <Table.Body className="divide-y">
-            {sales.map((sale, index) => (
-              <Table.Row
-                key={sale.id}
-                className="bg-white dark:border-gray-700 dark:bg-gray-800"
-              >
-                <Table.Cell className="font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                  {startIndex + index + 1}
-                </Table.Cell>
-                <Table.Cell>{sale.isDiscount ? "Ya" : "Tidak"}</Table.Cell>
-                <Table.Cell>{sale.salesAmount}</Table.Cell>
-                <Table.Cell className="flex items-center justify-center space-x-4">
-                  <Button
-                    color={"gray"}
-                    className="btn btn-outline"
-                    onClick={() => {
-                      setIdSales(sale.id);
-                      setIsModalUpdate(true);
-                    }}
+            {currentSales.length > 0 ? (
+              <>
+                {currentSales.map((sale, index) => (
+                  <Table.Row
+                    key={sale.id}
+                    className="bg-white dark:border-gray-700 dark:bg-gray-800"
                   >
-                    Edit
-                  </Button>
-                  <Button
-                    color={"red"}
-                    className="btn btn-error"
-                    onClick={() => {
-                      setIdSales(sale.id);
-                      setIsModalDelete(true);
-                    }}
-                  >
-                    Hapus
-                  </Button>
+                    <Table.Cell className="font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                      {startIndex + index + 1}
+                    </Table.Cell>
+                    <Table.Cell>{sale.isDiscount ? "Ya" : "Tidak"}</Table.Cell>
+                    <Table.Cell>{sale.salesAmount}</Table.Cell>
+                    <Table.Cell className="flex items-center justify-center space-x-4">
+                      <Button
+                        color={"gray"}
+                        className="btn btn-outline"
+                        onClick={() => {
+                          setIdSales(sale.id);
+                          setIsModalUpdate(true);
+                        }}
+                      >
+                        Edit
+                      </Button>
+                      <Button
+                        color={"red"}
+                        className="btn btn-error"
+                        onClick={() => {
+                          setIdSales(sale.id);
+                          setIsModalDelete(true);
+                        }}
+                      >
+                        Hapus
+                      </Button>
+                    </Table.Cell>
+                  </Table.Row>
+                ))}{" "}
+              </>
+            ) : (
+              <Table.Row>
+                <Table.Cell colSpan={4} className="text-center">
+                  Tidak ada penjualan
                 </Table.Cell>
               </Table.Row>
-            ))}
+            )}
           </Table.Body>
         </Table>
       </div>
