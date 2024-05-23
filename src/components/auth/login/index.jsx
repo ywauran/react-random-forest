@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Navigate } from "react-router-dom";
 import { doSignInWithEmailAndPassword } from "../../../firebase/auth";
 import { useAuth } from "../../../contexts/authContext";
-import Loading from "../../loading/index";
 import Logo from "../../../assets/logo.png";
 import { Card, Button, TextInput, Label, Spinner } from "flowbite-react";
 

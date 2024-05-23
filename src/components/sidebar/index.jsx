@@ -1,4 +1,3 @@
-import { NavLink } from "react-router-dom";
 import { doSignOut } from "../../firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { Sidebar, Button } from "flowbite-react";
@@ -17,15 +16,23 @@ const SidebarApp = () => {
   return (
     <>
       <Sidebar aria-label="Default sidebar example" className="h-screen ">
-        <Sidebar.Items>
-          <Sidebar.Logo href="#" img={Logo} imgAlt="Logo"></Sidebar.Logo>
+        <Sidebar.Items className="items-center space-y-2">
+          <Sidebar.Logo
+            href="#"
+            img={Logo}
+            className="w-14 h-14"
+            imgAlt="Logo"
+            style={{ width: "100px" }}
+          />
           <Sidebar.ItemGroup>
             {navData.map((item, index) => (
               <Sidebar.Item
                 key={index}
                 icon={item.icon}
                 active={item.path === window.location.pathname}
-                className="text-red-500 cursor-pointer"
+                className={`font-bold cursor-pointer ${
+                  item.path === window.location.pathname ? "border-b-4" : ""
+                }`}
                 onClick={() => navigate(item.path)}
               >
                 {item.label}

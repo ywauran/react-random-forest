@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { updateDrugs, getDrugsById } from "../../service/drugs"; // Updated import
+import { updateDrugs, getDrugsById } from "../../service/drugs";
 import Loading from "../loading";
+import ToastNotification from "../toast/toast-notification";
 
 const FormUpdateDrugs = ({ fetchData, setOpenModal, id }) => {
-  // Updated component name
   const [newDrug, setNewDrug] = useState({
-    // Updated state variable name
     name: "",
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -14,14 +13,13 @@ const FormUpdateDrugs = ({ fetchData, setOpenModal, id }) => {
 
   useEffect(() => {
     if (id) {
-      fetchDrugById(id); // Updated function call
+      fetchDrugById(id);
     }
   }, [id]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setNewDrug((prevDrug) => ({
-      // Updated state variable name
       ...prevDrug,
       [name]: value,
       updatedAt: new Date().toISOString(),
@@ -30,22 +28,24 @@ const FormUpdateDrugs = ({ fetchData, setOpenModal, id }) => {
 
   const fetchDrugById = async (id) => {
     try {
-      const drug = await getDrugsById(id); // Updated function call
-      setNewDrug(drug); // Updated state variable name
+      const drug = await getDrugsById(id);
+      setNewDrug(drug);
     } catch (error) {
-      console.error("Error fetching Drugs:", error.message); // Updated error message
+      console.error("Error fetching Drugs:", error.message);
     }
   };
 
   const handleUpdate = async () => {
     setIsLoading(true);
     try {
-      await updateDrugs(id, newDrug); // Updated function call
+      await updateDrugs(id, newDrug);
       fetchData();
       setIsLoading(false);
       setOpenModal(false);
+      ToastNotification.success("Obat berhasil diubah");
     } catch (error) {
-      console.error("Error updating Drugs:", error.message); // Updated error message
+      console.error("Error updating Drugs:", error.message);
+      ToastNotification.error("Obat gagal diubah");
       setIsLoading(false);
     }
   };
@@ -61,7 +61,7 @@ const FormUpdateDrugs = ({ fetchData, setOpenModal, id }) => {
           name="name"
           id="name"
           className="w-full input input-bordered"
-          value={newDrug.name} // Updated state variable name
+          value={newDrug.name}
           onChange={handleChange}
         />
       </div>
@@ -81,4 +81,4 @@ const FormUpdateDrugs = ({ fetchData, setOpenModal, id }) => {
   );
 };
 
-export default FormUpdateDrugs; // Updated export
+export default FormUpdateDrugs;

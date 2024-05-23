@@ -1,21 +1,22 @@
 import React, { useState } from "react";
 import { createSale } from "../../service/sales";
 import Loading from "../loading";
+import { Button, TextInput, Select } from "flowbite-react";
+import ToastNotification from "../toast/toast-notification";
 
 const FormCreateSales = ({ fetchData, setOpenModal, id }) => {
   const [newSale, setNewSale] = useState({
     salesAmount: 0,
-    isDiscount: false, // Initialize isDiscount state
+    isDiscount: false,
     updatedAt: new Date().toISOString(),
   });
   const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-
     setNewSale((prevSale) => ({
       ...prevSale,
-      [name]: value === "true", // Convert value to boolean
+      [name]: name === "isDiscount" ? value === "true" : value,
       updatedAt: new Date().toISOString(),
     }));
   };
@@ -27,8 +28,10 @@ const FormCreateSales = ({ fetchData, setOpenModal, id }) => {
       fetchData();
       setIsLoading(false);
       setOpenModal(false);
+      ToastNotification.success("Penjualan berhasil ditambahkan");
     } catch (error) {
       console.error("Error creating Sale:", error.message);
+      ToastNotification.error("Penjualan gagal ditambahkan");
       setIsLoading(false);
     }
   };
@@ -39,41 +42,38 @@ const FormCreateSales = ({ fetchData, setOpenModal, id }) => {
         <label htmlFor="salesAmount" className="label">
           Penjualan
         </label>
-        <input
+        <TextInput
           type="number"
           name="salesAmount"
           id="salesAmount"
           className="w-full input input-bordered"
           value={newSale.salesAmount}
           onChange={handleChange}
+          min={0}
         />
       </div>
       <div>
         <label htmlFor="isDiscount" className="label">
           Diskon
         </label>
-        <select
+        <Select
           name="isDiscount"
           id="isDiscount"
           className="w-full input input-bordered"
-          value={newSale.isDiscount.toString()} // Convert boolean to string
+          value={newSale.isDiscount.toString()}
           onChange={handleChange}
         >
           <option value="false">Tidak</option>
           <option value="true">Ya</option>
-        </select>
+        </Select>
       </div>
       <div className="flex justify-end pt-2 space-x-4">
-        <button onClick={() => setOpenModal(false)} className="w-16 btn">
+        <Button color={"gray"} onClick={() => setOpenModal(false)}>
           Tidak
-        </button>
-        <button
-          onClick={handleCreate}
-          className="w-16 btn btn-primary"
-          disabled={isLoading}
-        >
+        </Button>
+        <Button color={"blue"} onClick={handleCreate} disabled={isLoading}>
           {isLoading ? <Loading size="sm" /> : "Ya"}
-        </button>
+        </Button>
       </div>
     </>
   );

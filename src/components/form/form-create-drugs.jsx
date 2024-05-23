@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { createDrugs } from "../../service/drugs"; // Assuming you have a createDrugs service function
+import { createDrugs } from "../../service/drugs";
 import Loading from "../loading";
-
+import { Button, TextInput } from "flowbite-react";
+import ToastNotification from "../toast/toast-notification";
 const FormCreateDrugs = ({ fetchData, setOpenModal }) => {
   const [newDrug, setNewDrug] = useState({
     name: "",
@@ -22,23 +23,25 @@ const FormCreateDrugs = ({ fetchData, setOpenModal }) => {
   const handleCreate = async () => {
     setLoading(true);
     try {
-      const createdDrug = await createDrugs(newDrug);
+      await createDrugs(newDrug);
       fetchData();
       setOpenModal(false);
-      setLoading(false);
+      ToastNotification.success("Obat berhasil ditambahkan");
     } catch (error) {
       console.error("Error creating Drugs:", error.message);
+      ToastNotification.error("Obat gagal ditambahkan");
+    } finally {
       setLoading(false);
     }
   };
 
   return (
-    <>
+    <div>
       <div>
         <label htmlFor="name" className="label">
           Nama Obat
         </label>
-        <input
+        <TextInput
           type="text"
           name="name"
           id="name"
@@ -48,18 +51,18 @@ const FormCreateDrugs = ({ fetchData, setOpenModal }) => {
         />
       </div>
       <div className="flex justify-end pt-2 space-x-4">
-        <button onClick={() => setOpenModal(false)} className="w-16 btn">
-          Tidak
-        </button>
-        <button
-          onClick={handleCreate}
-          className="w-16 btn btn-primary"
-          disabled={isLoading}
+        <Button
+          color="gray"
+          className="w-16 border-2"
+          onClick={() => setOpenModal(false)}
         >
+          Tidak
+        </Button>
+        <Button onClick={handleCreate} color="blue" disabled={isLoading}>
           {isLoading ? <Loading size="sm" /> : "Ya"}
-        </button>
+        </Button>
       </div>
-    </>
+    </div>
   );
 };
 

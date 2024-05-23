@@ -2,6 +2,8 @@ import React from "react";
 import Loading from "../loading";
 import { useState } from "react";
 import { deleteSale } from "../../service/sales";
+import { Button } from "flowbite-react";
+import ToastNotification from "../toast/toast-notification";
 
 const FormDeleteSales = ({ setOpenModal, id, fetchData }) => {
   const [isLoading, setLoading] = useState(false);
@@ -12,9 +14,11 @@ const FormDeleteSales = ({ setOpenModal, id, fetchData }) => {
       await deleteSale(id);
       fetchData();
       setOpenModal(false);
+      ToastNotification.success("Penjualan berhasil dihapus");
     } catch (error) {
       console.error("Error deleting Sale:", error.message);
       setLoading(false);
+      ToastNotification.error("Penjualan gagal dihapus");
     }
   };
   return (
@@ -23,16 +27,12 @@ const FormDeleteSales = ({ setOpenModal, id, fetchData }) => {
         Anda yakin ingin menghapus data ini?
       </h4>
       <div className="flex justify-end pt-2 mt-4 space-x-4">
-        <button onClick={() => setOpenModal(false)} className="w-16 btn">
+        <Button color="gray" onClick={() => setOpenModal(false)}>
           Tidak
-        </button>
-        <button
-          onClick={handleDelete}
-          className="w-16 btn btn-primary"
-          disabled={isLoading}
-        >
+        </Button>
+        <Button onClick={handleDelete} color="blue" disabled={isLoading}>
           {isLoading ? <Loading size="sm" /> : "Ya"}
-        </button>
+        </Button>
       </div>
     </div>
   );

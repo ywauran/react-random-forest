@@ -43,7 +43,7 @@ const Layout = ({ children }) => {
     <>
       <div className="flex">
         <Sidebar />
-        <main className="relative w-full h-full p-10 overflow-y-auto bg-gray-50 dark:bg-gray-900 lg:ml-64">
+        <main className="relative w-full h-screen p-10 overflow-y-auto bg-white dark:bg-gray-900 lg:ml-10">
           {children}
         </main>
       </div>

@@ -5,7 +5,8 @@ import Modal from "../../components/modal/modal";
 import FormCreateDrugs from "../../components/form/form-create-drugs";
 import FormUpdateDrugs from "../../components/form/form-update-drugs";
 import FormDeleteDrugs from "../../components/form/form-delete-drugs";
-import { getAllDrugs } from "../../service/drugs"; // Updated import
+import { getAllDrugs } from "../../service/drugs";
+import { Table, Button, Spinner } from "flowbite-react";
 
 const PAGE_SIZE = 5;
 
@@ -92,72 +93,55 @@ const Drugs = () => {
           }
         />
       )}
-
-      <h1 className="mb-8 text-3xl font-bold">Data Obat</h1>
+      <h1 className="mb-8 font-bold " style={{ fontSize: "30px" }}>
+        Data Obat
+      </h1>
       <>
         <div className="flex items-center justify-end mb-8">
-          <button
-            onClick={() => setIsModalCreate(true)}
-            className="btn btn-primary"
-          >
+          <Button onClick={() => setIsModalCreate(true)} color={"blue"}>
             Tambah
-          </button>
+          </Button>
         </div>
-        <div className="overflow-x-auto bg-white shadow">
-          <table className="table text-center">
-            <thead>
-              <tr>
-                <th>No</th>
-                <th>Nama</th>
-                <th>Aksi</th>
-              </tr>
-            </thead>
-            <tbody>
+        <div className="p-10 overflow-x-auto bg-white shadow">
+          <Table>
+            <Table.Head>
+              <Table.HeadCell>No</Table.HeadCell>
+              <Table.HeadCell>Nama</Table.HeadCell>
+              <Table.HeadCell>Aksi</Table.HeadCell>
+            </Table.Head>
+            <Table.Body className="divide-y">
               {isLoading ? (
                 <tr>
-                  <td colSpan="3">Loading...</td>
+                  <td colSpan="3" className="mt-4 text-center">
+                    <Spinner color={"gray"} size={"lg"} />
+                  </td>
                 </tr>
               ) : (
                 currentData.map((drugItem, index) => (
-                  <tr key={drugItem.id}>
-                    <th>{startIndex + index + 1}</th>
-
-                    <td className="font-semibold">{drugItem.name}</td>
-                    <td className="flex items-center justify-center space-x-4">
-                      <button
-                        className="btn btn-error"
-                        onClick={() => {
-                          setId(drugItem.id);
-                          setIsModalDelete(true);
-                        }}
+                  <Table.Row
+                    key={drugItem.id}
+                    className="bg-white dark:border-gray-700 dark:bg-gray-800"
+                  >
+                    <Table.Cell className="font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                      {startIndex + index + 1}
+                    </Table.Cell>
+                    <Table.Cell>{drugItem.name}</Table.Cell>
+                    <Table.Cell className="flex items-center justify-center space-x-4">
+                      <Link
+                        to={`/drugs/${drugItem.id}`}
+                        className="hover:underline"
                       >
-                        Hapus
-                      </button>
-                      <button
-                        onClick={() => {
-                          setId(drugItem.id);
-                          setIsModalUpdate(true);
-                        }}
-                        className="btn btn-primary"
-                      >
-                        Edit
-                      </button>
-                      <Link to={`/drugs/${drugItem.id}`} className="btn">
                         Detail
                       </Link>
-                    </td>
-                  </tr>
+                    </Table.Cell>
+                  </Table.Row>
                 ))
               )}
-            </tbody>
-          </table>
+            </Table.Body>
+          </Table>
         </div>
         <div className="flex justify-end mt-4 space-x-4">
-          <button
-            className="btn"
-            onClick={handlePrevPage}
-            disabled={!canGoPrev}
-          >
+          <Button color="blue" onClick={handlePrevPage} disabled={!canGoPrev}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -172,12 +156,8 @@ const Drugs = () => {
                 d="M15.75 19.5 8.25 12l7.5-7.5"
               />
             </svg>
-          </button>
-          <button
-            className="btn"
-            onClick={handleNextPage}
-            disabled={!canGoNext}
-          >
+          </Button>
+          <Button color={"blue"} onClick={handleNextPage} disabled={!canGoNext}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -192,7 +172,7 @@ const Drugs = () => {
                 d="m8.25 4.5 7.5 7.5-7.5 7.5"
               />
             </svg>
-          </button>
+          </Button>
         </div>
       </>
     </Layout>

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { updateSale, getSaleById } from "../../service/sales";
 import Loading from "../loading";
+import ToastNotification from "../toast/toast-notification";
 
 const FormUpdateSale = ({ fetchData, setOpenModal, id }) => {
   const [newSale, setNewSale] = useState({
@@ -15,7 +16,9 @@ const FormUpdateSale = ({ fetchData, setOpenModal, id }) => {
     try {
       const sale = await getSaleById(id);
       setNewSale(sale);
+      ToastNotification.success("Penjualan diperbarui");
     } catch (error) {
+      ToastNotification.error("Penjualan gagal diperbarui");
       console.error("Error fetching Sale:", error.message);
     }
   };

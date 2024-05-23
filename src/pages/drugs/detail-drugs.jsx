@@ -7,6 +7,7 @@ import Modal from "../../components/modal/modal";
 import FormCreateSales from "../../components/form/form-create-sales";
 import FormUpdateSales from "../../components/form/form-update-sales";
 import FormDeleteSales from "../../components/form/form-delete-sales";
+import { Button, Table } from "flowbite-react";
 
 const DetailDrugs = () => {
   const { id } = useParams();
@@ -102,45 +103,49 @@ const DetailDrugs = () => {
 
       <h1 className="mb-8 text-3xl font-bold">{alkes?.name}</h1>
       <div className="flex items-center justify-between mb-8">
-        <button
-          onClick={() => setIsModalCreate(true)}
-          className="btn btn-primary"
-        >
+        <Button onClick={() => setIsModalCreate(true)} color={"blue"}>
           Tambah
-        </button>
+        </Button>
         {sales.length > 3 && (
-          <Link to={`/drugs/calculate/${id}`} className="btn">
-            Lihat Perhitungan
-          </Link>
+          <Button color={"white"} className="border-2 btn btn-outline">
+            <Link to={`/drugs/calculate/${id}`} className="btn">
+              Lihat Perhitungan
+            </Link>
+          </Button>
         )}
       </div>
       <div className="overflow-x-auto shadow">
-        <table className="table text-center">
-          <thead>
-            <tr>
-              <th>No</th>
-              <th>Diskon</th>
-              <th>Penjualan</th>
-              <th>Aksi</th>
-            </tr>
-          </thead>
-          <tbody>
-            {currentSales.map((sale, index) => (
-              <tr key={sale.id}>
-                <th>{startIndex + index + 1}</th>
-                <td>{sale.isDiscount ? "Ya" : "Tidak"}</td>
-                <td>{sale.salesAmount}</td>
-                <td className="flex items-center justify-center space-x-4">
-                  <button
-                    className="btn btn-primary"
+        <Table hoverable={true}>
+          <Table.Head>
+            <Table.HeadCell>No</Table.HeadCell>
+            <Table.HeadCell>Diskon</Table.HeadCell>
+            <Table.HeadCell>Penjualan</Table.HeadCell>
+            <Table.HeadCell>Aksi</Table.HeadCell>
+          </Table.Head>
+          <Table.Body className="divide-y">
+            {sales.map((sale, index) => (
+              <Table.Row
+                key={sale.id}
+                className="bg-white dark:border-gray-700 dark:bg-gray-800"
+              >
+                <Table.Cell className="font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                  {startIndex + index + 1}
+                </Table.Cell>
+                <Table.Cell>{sale.isDiscount ? "Ya" : "Tidak"}</Table.Cell>
+                <Table.Cell>{sale.salesAmount}</Table.Cell>
+                <Table.Cell className="flex items-center justify-center space-x-4">
+                  <Button
+                    color={"gray"}
+                    className="btn btn-outline"
                     onClick={() => {
                       setIdSales(sale.id);
                       setIsModalUpdate(true);
                     }}
                   >
                     Edit
-                  </button>
-                  <button
+                  </Button>
+                  <Button
+                    color={"red"}
                     className="btn btn-error"
                     onClick={() => {
                       setIdSales(sale.id);
@@ -148,16 +153,16 @@ const DetailDrugs = () => {
                     }}
                   >
                     Hapus
-                  </button>
-                </td>
-              </tr>
+                  </Button>
+                </Table.Cell>
+              </Table.Row>
             ))}
-          </tbody>
-        </table>
+          </Table.Body>
+        </Table>
       </div>
       <div className="flex justify-end mt-4 space-x-4">
-        <button
-          className="btn"
+        <Button
+          color="blue"
           onClick={handlePrevPage}
           disabled={currentPage === 1}
         >
@@ -175,9 +180,9 @@ const DetailDrugs = () => {
               d="M15.75 19.5 8.25 12l7.5-7.5"
             />
           </svg>
-        </button>
-        <button
-          className="btn"
+        </Button>
+        <Button
+          color={"blue"}
           onClick={handleNextPage}
           disabled={currentPage === totalPages}
         >
@@ -195,7 +200,7 @@ const DetailDrugs = () => {
               d="m8.25 4.5 7.5 7.5-7.5 7.5"
             />
           </svg>
-        </button>
+        </Button>
       </div>
     </Layout>
   );
