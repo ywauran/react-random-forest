@@ -172,6 +172,7 @@ const DetailDrugs = () => {
       </div>
       <div className="flex justify-end mt-4 space-x-4">
         <Button
+          size={"xs"}
           color="blue"
           onClick={handlePrevPage}
           disabled={currentPage === 1}
@@ -193,6 +194,7 @@ const DetailDrugs = () => {
         </Button>
         <Button
           color={"blue"}
+          size="xs"
           onClick={handleNextPage}
           disabled={currentPage === totalPages}
         >

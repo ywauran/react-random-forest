@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { updateSale, getSaleById } from "../../service/sales";
 import Loading from "../loading";
 import ToastNotification from "../toast/toast-notification";
+import { Button, Select, Spinner, TextInput } from "flowbite-react";
 
 const FormUpdateSale = ({ fetchData, setOpenModal, id }) => {
   const [newSale, setNewSale] = useState({
@@ -59,7 +60,7 @@ const FormUpdateSale = ({ fetchData, setOpenModal, id }) => {
         <label htmlFor="salesAmount" className="label">
           Penjualan
         </label>
-        <input
+        <TextInput
           type="number"
           name="salesAmount"
           id="salesAmount"
@@ -72,7 +73,7 @@ const FormUpdateSale = ({ fetchData, setOpenModal, id }) => {
         <label htmlFor="isDiscount" className="label">
           Diskon
         </label>
-        <select
+        <Select
           name="isDiscount"
           id="isDiscount"
           className="w-full input input-bordered"
@@ -81,19 +82,15 @@ const FormUpdateSale = ({ fetchData, setOpenModal, id }) => {
         >
           <option value="false">Tidak</option>
           <option value="true">Ya</option>
-        </select>
+        </Select>
       </div>
       <div className="flex justify-end pt-2 space-x-4">
-        <button onClick={() => setOpenModal(false)} className="w-16 btn">
+        <button onClick={() => setOpenModal(false)} color="gray">
           Tidak
         </button>
-        <button
-          onClick={handleUpdate}
-          className="w-16 btn btn-primary"
-          disabled={isLoading}
-        >
-          {isLoading ? <Loading size="sm" /> : "Ya"}
-        </button>
+        <Button color="blue" onClick={handleUpdate} disabled={isLoading}>
+          {isLoading ? <Spinner size={"sm"} /> : "Ya"}
+        </Button>
       </div>
     </>
   );

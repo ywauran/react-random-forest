@@ -161,6 +161,23 @@ const CalculateDrugs = () => {
                           <p>Jumlah Penjualan: {sale.salesAmount}</p>
                         </div>
                       ))}
+                    </div>
+                  ))}
+                </Timeline.Body>
+              </Accordion>
+            </Timeline.Content>
+          </Timeline.Item>
+          <Timeline.Item>
+            <Timeline.Point />
+            <Timeline.Content>
+              <Timeline.Title>Langkah Kedua</Timeline.Title>
+              <Accordion title="Menghitung Entropy dan Gain">
+                <Timeline.Body>
+                  {randomSamples.map((sample, sampleIndex) => (
+                    <div key={sampleIndex}>
+                      <h3 className="text-lg font-bold">
+                        Sampel Acak {sampleIndex + 1}
+                      </h3>
                       <p>
                         Entropy:{" "}
                         {samplesEntropyAndGain[sampleIndex]?.entropy.toFixed(4)}
@@ -178,26 +195,9 @@ const CalculateDrugs = () => {
           <Timeline.Item>
             <Timeline.Point />
             <Timeline.Content>
-              <Timeline.Title>Langkah Kedua</Timeline.Title>
-              <Accordion title="Menghitung Entropy dan Gain">
-                <Timeline.Body>
-                  <p>Entropy: {entropy.toFixed(4)}</p>
-                  <p>Gain: {gain.toFixed(4)}</p>
-                </Timeline.Body>
-              </Accordion>
-            </Timeline.Content>
-          </Timeline.Item>
-          <Timeline.Item>
-            <Timeline.Point />
-            <Timeline.Content>
               <Timeline.Title>Langkah Ketiga</Timeline.Title>
               <Accordion title="Membuat Pohon Keputusan">
                 <Timeline.Body>
-                  <p>
-                    {gain > 0
-                      ? `Keputusan terbaik: Membagi data berdasarkan atribut Diskon`
-                      : `Tidak ada pembagian data yang memberikan informasi lebih baik.`}
-                  </p>
                   <DecisionTree samplesEntropyAndGain={samplesEntropyAndGain} />
                 </Timeline.Body>
               </Accordion>

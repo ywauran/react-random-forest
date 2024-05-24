@@ -22,7 +22,7 @@ const FormDeleteSales = ({ setOpenModal, id, fetchData }) => {
     }
   };
   return (
-    <div>
+    <>
       <h4 className="text-lg text-center text-semibold">
         Anda yakin ingin menghapus data ini?
       </h4>
@@ -34,7 +34,7 @@ const FormDeleteSales = ({ setOpenModal, id, fetchData }) => {
           {isLoading ? <Loading size="sm" /> : "Ya"}
         </Button>
       </div>
-    </div>
+    </>
   );
 };
 

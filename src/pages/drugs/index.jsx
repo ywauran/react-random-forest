@@ -5,7 +5,7 @@ import Modal from "../../components/modal/modal";
 import FormCreateDrugs from "../../components/form/form-create-drugs";
 import FormUpdateDrugs from "../../components/form/form-update-drugs";
 import FormDeleteDrugs from "../../components/form/form-delete-drugs";
-import { getAllDrugs } from "../../service/drugs";
+import { getAllDrugs, deleteDrugs, updateDrugs } from "../../service/drugs";
 import { Table, Button, Spinner } from "flowbite-react";
 
 const PAGE_SIZE = 5;
@@ -20,13 +20,13 @@ const Drugs = () => {
   const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
-    fetchDrugs(); // Updated function call
-  }, [currentPage]); // Trigger fetchDrugs on page change
+    fetchDrugs();
+  }, [currentPage]);
 
   const fetchDrugs = async () => {
     setIsLoading(true);
     try {
-      const response = await getAllDrugs(); // Updated function call
+      const response = await getAllDrugs();
       setData(response.drugs);
       setIsLoading(false);
     } catch (error) {
@@ -127,12 +127,34 @@ const Drugs = () => {
                     </Table.Cell>
                     <Table.Cell>{drugItem.name}</Table.Cell>
                     <Table.Cell className="flex items-center justify-center space-x-4">
-                      <Link
-                        to={`/drugs/${drugItem.id}`}
+                      <Button color="gray">
+                        <Link
+                          to={`/drugs/${drugItem.id}`}
+                          className="hover:underline"
+                        >
+                          Detail
+                        </Link>
+                      </Button>
+                      <Button
+                        color="blue"
                         className="hover:underline"
+                        onClick={() => {
+                          setIsModalUpdate(true);
+                          setId(drugItem.id);
+                        }}
                       >
-                        Detail
-                      </Link>
+                        Edit
+                      </Button>
+                      <Button
+                        color="failure"
+                        className="hover:underline"
+                        onClick={() => {
+                          setIsModalDelete(true);
+                          setId(drugItem.id);
+                        }}
+                      >
+                        Hapus
+                      </Button>
                     </Table.Cell>
                   </Table.Row>
                 ))
@@ -141,7 +163,12 @@ const Drugs = () => {
           </Table>
         </div>
         <div className="flex justify-end mt-4 space-x-4">
-          <Button color="blue" onClick={handlePrevPage} disabled={!canGoPrev}>
+          <Button
+            size={"xs"}
+            color="blue"
+            onClick={handlePrevPage}
+            disabled={!canGoPrev}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -157,7 +184,12 @@ const Drugs = () => {
               />
             </svg>
           </Button>
-          <Button color={"blue"} onClick={handleNextPage} disabled={!canGoNext}>
+          <Button
+            size={"xs"}
+            color={"blue"}
+            onClick={handleNextPage}
+            disabled={!canGoNext}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"

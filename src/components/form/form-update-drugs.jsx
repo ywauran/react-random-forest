@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { updateDrugs, getDrugsById } from "../../service/drugs";
 import Loading from "../loading";
 import ToastNotification from "../toast/toast-notification";
+import { Button, TextInput, Spinner } from "flowbite-react";
 
 const FormUpdateDrugs = ({ fetchData, setOpenModal, id }) => {
   const [newDrug, setNewDrug] = useState({
@@ -56,7 +57,7 @@ const FormUpdateDrugs = ({ fetchData, setOpenModal, id }) => {
         <label htmlFor="name" className="label">
           Nama Obat
         </label>
-        <input
+        <TextInput
           type="text"
           name="name"
           id="name"
@@ -66,16 +67,12 @@ const FormUpdateDrugs = ({ fetchData, setOpenModal, id }) => {
         />
       </div>
       <div className="flex justify-end pt-2 space-x-4">
-        <button onClick={() => setOpenModal(false)} className="w-16 btn">
+        <Button color="gray" onClick={() => setOpenModal(false)}>
           Tidak
-        </button>
-        <button
-          onClick={handleUpdate}
-          className="w-16 btn btn-primary"
-          disabled={isLoading}
-        >
-          {isLoading ? <Loading size="sm" /> : "Ya"}
-        </button>
+        </Button>
+        <Button color={"blue"} onClick={handleUpdate} disabled={isLoading}>
+          {isLoading ? <Spinner size={"sm"} /> : "Ya"}
+        </Button>
       </div>
     </>
   );
