@@ -19,6 +19,7 @@ const CalculateDrugs = () => {
   const [stock, setStock] = useState(0);
   const [predictions, setPredictions] = useState([]);
   const [finalPrediction, setFinalPrediction] = useState(null);
+  const [thresholds, setThresholds] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -100,7 +101,6 @@ const CalculateDrugs = () => {
 
     const gainDiscount = totalEntropy - entropyDiscount;
 
-    // Calculate entropy for salesAmount
     const threshold = Math.floor(sample.length / 2);
     const salesAmountLow = sample.slice(0, threshold);
     const salesAmountHigh = sample.slice(threshold);
@@ -127,22 +127,23 @@ const CalculateDrugs = () => {
   const predictSales = (e) => {
     e.preventDefault();
     console.log(randomSamples);
+    let temp = [];
     let predictions = randomSamples.map((sample) => {
-      console.log(sample);
       const filteredSales = sample.filter(
         (sale) => sale.isDiscount === isDiscount
       );
-      console.log(filteredSales);
       if (filteredSales.length === 0) return 0;
       const avgSalesAmount =
         filteredSales.reduce(
           (sum, sale) => sum + parseInt(sale.salesAmount),
           0
         ) / filteredSales.length;
+      temp.push(avgSalesAmount);
       return avgSalesAmount;
     });
+    setThresholds(temp);
+    console.log(temp);
     setPredictions(predictions);
-    console.log(predictions);
 
     const avgPrediction =
       predictions.reduce((a, b) => a + b, 0) / predictions.length;
@@ -279,8 +280,11 @@ const CalculateDrugs = () => {
             <Timeline.Content>
               <Timeline.Title>Langkah Ketiga</Timeline.Title>
               <Accordion title="Membuat Pohon Keputusan">
-                <Timeline.Body>
-                  <DecisionTree samplesEntropyAndGain={samplesEntropyAndGain} />
+                <Timeline.Body className="flex flex-col items-center justify-center">
+                  <DecisionTree
+                    samplesEntropyAndGain={samplesEntropyAndGain}
+                    stock={thresholds}
+                  />
                 </Timeline.Body>
               </Accordion>
             </Timeline.Content>
