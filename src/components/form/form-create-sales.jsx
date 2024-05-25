@@ -46,7 +46,6 @@ const FormCreateSales = ({ fetchData, setOpenModal, id }) => {
         <Select
           name="isDiscount"
           id="isDiscount"
-          className="w-full input input-bordered"
           value={newSale.isDiscount.toString()}
           onChange={handleChange}
         >

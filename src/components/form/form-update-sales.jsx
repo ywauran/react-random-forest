@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { updateSale, getSaleById } from "../../service/sales";
-import Loading from "../loading";
 import ToastNotification from "../toast/toast-notification";
 import { Button, Select, Spinner, TextInput } from "flowbite-react";
 
@@ -8,6 +7,7 @@ const FormUpdateSale = ({ fetchData, setOpenModal, id }) => {
   const [newSale, setNewSale] = useState({
     salesAmount: 0,
     isDiscount: false,
+    stock: 0,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   });
@@ -57,19 +57,6 @@ const FormUpdateSale = ({ fetchData, setOpenModal, id }) => {
   return (
     <>
       <div>
-        <label htmlFor="salesAmount" className="label">
-          Penjualan
-        </label>
-        <TextInput
-          type="number"
-          name="salesAmount"
-          id="salesAmount"
-          className="w-full input input-bordered"
-          value={newSale.salesAmount}
-          onChange={handleChange}
-        />
-      </div>
-      <div>
         <label htmlFor="isDiscount" className="label">
           Diskon
         </label>
@@ -83,6 +70,32 @@ const FormUpdateSale = ({ fetchData, setOpenModal, id }) => {
           <option value="false">Tidak</option>
           <option value="true">Ya</option>
         </Select>
+      </div>
+      <div>
+        <label htmlFor="stock" className="label">
+          Stock
+        </label>
+        <TextInput
+          type="number"
+          name="stock"
+          id="stock"
+          className="w-full input input-bordered"
+          value={newSale.stock}
+          onChange={handleChange}
+        />
+      </div>
+      <div>
+        <label htmlFor="salesAmount" className="label">
+          Penjualan
+        </label>
+        <TextInput
+          type="number"
+          name="salesAmount"
+          id="salesAmount"
+          className="w-full input input-bordered"
+          value={newSale.salesAmount}
+          onChange={handleChange}
+        />
       </div>
       <div className="flex justify-end pt-2 space-x-4">
         <button onClick={() => setOpenModal(false)} color="gray">

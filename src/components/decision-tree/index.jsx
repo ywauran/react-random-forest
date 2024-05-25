@@ -1,6 +1,9 @@
+import TreeComponent from "./tree";
+
 const DecisionTree = ({ samplesEntropyAndGain }) => {
   return (
     <div>
+      <TreeComponent />
       {samplesEntropyAndGain.map((sample, sampleIndex) => (
         <div key={sampleIndex}>
           <h3 className="text-lg font-bold">

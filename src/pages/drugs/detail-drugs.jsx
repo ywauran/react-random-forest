@@ -119,6 +119,7 @@ const DetailDrugs = () => {
           <Table.Head>
             <Table.HeadCell>No</Table.HeadCell>
             <Table.HeadCell>Diskon</Table.HeadCell>
+            <Table.HeadCell>Stok</Table.HeadCell>
             <Table.HeadCell>Penjualan</Table.HeadCell>
             <Table.HeadCell>Aksi</Table.HeadCell>
           </Table.Head>
@@ -134,6 +135,7 @@ const DetailDrugs = () => {
                       {startIndex + index + 1}
                     </Table.Cell>
                     <Table.Cell>{sale.isDiscount ? "Ya" : "Tidak"}</Table.Cell>
+                    <Table.Cell> {sale.stock}</Table.Cell>
                     <Table.Cell>{sale.salesAmount}</Table.Cell>
                     <Table.Cell className="flex items-center justify-center space-x-4">
                       <Button
