@@ -84,8 +84,6 @@ const CalculateDrugs = () => {
     const totalEntropy = calculateEntropy(
       sample.map((sale) => sale.salesAmount)
     );
-
-    // Calculate entropy for discount
     const discountTrue = sample.filter((sale) => sale.isDiscount);
     const discountFalse = sample.filter((sale) => !sale.isDiscount);
     const entropyDiscountTrue = calculateEntropy(
@@ -154,176 +152,181 @@ const CalculateDrugs = () => {
     <Layout>
       <h1 className="mb-8 text-3xl font-bold">Perhitungan {drug?.name}</h1>
       <div>
-        <div>
-          <label className="block mb-4 font-semibold" htmlFor="name">
-            Diskon
-          </label>
+        <div className="flex items-center justify-center space-x-8">
+          <div>
+            <label className="block mb-4 font-semibold" htmlFor="name">
+              Diskon
+            </label>
 
-          <Select
-            name="isDiscount"
-            id="isDiscount"
-            value={isDiscount}
-            className="w-32"
-            onChange={(e) => setIsDiscount(e.target.value === "true")}
-          >
-            <option value="false">Tidak</option>
-            <option value="true">Ya</option>
-          </Select>
-        </div>
-
-        <div className="mb-8">
-          <label className="block mb-4 font-semibold" htmlFor="salesAmount">
-            Jumlah penjualan
-          </label>
-          <TextInput
-            type="number"
-            value={stock}
-            onChange={(e) => setStock(e.target.value)}
-            min={0}
-            step={1}
-            className="w-32"
-            color={"gray"}
-          />
-        </div>
-        <div className="mb-8">
-          <label className="block mb-4 font-semibold" htmlFor="sampleSize">
-            Jumlah sampel acak:
-          </label>
-          <TextInput
-            type="number"
-            value={sampleSize}
-            onChange={handleSampleSizeChange}
-            min={1}
-            step={1}
-            className="w-32"
-            color={"gray"}
-          />
-        </div>
-        <button
-          onClick={(e) => predictSales(e)}
-          className="px-4 py-2 mb-8 text-white bg-blue-500 rounded-md"
-        >
-          Prediksi Penjualan
-        </button>
-        {finalPrediction !== null && (
-          <div className="mb-8">
-            <h3 className="text-lg font-bold">
-              Prediksi Penjualan: {finalPrediction.toFixed(2)}
-            </h3>
+            <Select
+              name="isDiscount"
+              id="isDiscount"
+              value={isDiscount}
+              className="w-44"
+              onChange={(e) => setIsDiscount(e.target.value === "true")}
+            >
+              <option value="false">Tidak</option>
+              <option value="true">Ya</option>
+            </Select>
           </div>
-        )}
-        <Timeline>
-          <Timeline.Item>
-            <Timeline.Point />
-            <Timeline.Content>
-              <Timeline.Title>Data Penjualan Obat</Timeline.Title>
-              <Accordion defaultOpen={true}>
-                <Timeline.Body>
-                  {sales.map((sale, index) => (
-                    <div key={index}>
-                      <p>Diskon: {sale.isDiscount ? "Ya" : "Tidak"}</p>
-                      <p>Jumlah Penjualan: {sale.salesAmount}</p>
-                    </div>
-                  ))}
-                </Timeline.Body>
-              </Accordion>
-            </Timeline.Content>
-          </Timeline.Item>
-          <Timeline.Item>
-            <Timeline.Point />
-            <Timeline.Content>
-              <Timeline.Title>Langkah Pertama</Timeline.Title>
-              <Accordion title="Sampel Acak">
-                <Timeline.Body>
-                  {randomSamples.map((sample, sampleIndex) => (
-                    <div key={sampleIndex}>
-                      <h3 className="text-lg font-bold">
-                        Sampel Acak {sampleIndex + 1}
-                      </h3>
-                      {sample.map((sale, index) => (
-                        <div key={index}>
-                          <p>Diskon: {sale.isDiscount ? "Ya" : "Tidak"}</p>
-                          <p>Jumlah Penjualan: {sale.salesAmount}</p>
-                        </div>
-                      ))}
-                    </div>
-                  ))}
-                </Timeline.Body>
-              </Accordion>
-            </Timeline.Content>
-          </Timeline.Item>
-          <Timeline.Item>
-            <Timeline.Point />
-            <Timeline.Content>
-              <Timeline.Title>Langkah Kedua</Timeline.Title>
-              <Accordion title="Menghitung Entropy dan Gain">
-                <Timeline.Body>
-                  {samplesEntropyAndGain.map((sample, sampleIndex) => (
-                    <div key={sampleIndex}>
-                      <h3 className="text-lg font-bold">
-                        Sampel Acak {sampleIndex + 1}
-                      </h3>
-                      <p>Entropy: {sample.entropy.toFixed(4)}</p>
-                      <p>Gain Diskon: {sample.gainDiscount.toFixed(4)}</p>
-                      <p>
-                        Gain Jumlah Penjualan:{" "}
-                        {sample.gainSalesAmount.toFixed(4)}
-                      </p>
-                    </div>
-                  ))}
-                </Timeline.Body>
-              </Accordion>
-            </Timeline.Content>
-          </Timeline.Item>
-          <Timeline.Item>
-            <Timeline.Point />
-            <Timeline.Content>
-              <Timeline.Title>Langkah Ketiga</Timeline.Title>
-              <Accordion title="Membuat Pohon Keputusan">
-                <Timeline.Body className="flex flex-col items-center justify-center">
-                  <DecisionTree
-                    samplesEntropyAndGain={samplesEntropyAndGain}
-                    stock={thresholds}
-                  />
-                </Timeline.Body>
-              </Accordion>
-            </Timeline.Content>
-          </Timeline.Item>
-          <Timeline.Item>
-            <Timeline.Point />
-            <Timeline.Content>
-              <Timeline.Title>Langkah Keempat</Timeline.Title>
-              <Accordion title="Melakukan Prediksi Tiap Sampel Acak">
-                <Timeline.Body>
-                  {predictions.map((item, sampleIndex) => (
-                    <div key={sampleIndex}>
-                      <h3 className="text-lg font-bold">
-                        Prediksi Sampel Acak {sampleIndex + 1}
-                      </h3>
-                      <p>Prediksi: {item}</p>
-                    </div>
-                  ))}
-                </Timeline.Body>
-              </Accordion>
-            </Timeline.Content>
-          </Timeline.Item>
-          <Timeline.Item>
-            <Timeline.Point />
-            <Timeline.Content>
-              <Timeline.Title>Langkah Kelima</Timeline.Title>
-              <Accordion title="Melakukan Prediksi Akhir">
-                <Timeline.Body>
-                  <h3 className="text-lg font-bold">
-                    Prediksi Akhir:{" "}
-                    {finalPrediction !== null
-                      ? finalPrediction.toFixed(2)
-                      : "Belum dihitung"}
-                  </h3>
-                </Timeline.Body>
-              </Accordion>
-            </Timeline.Content>
-          </Timeline.Item>
-        </Timeline>
+
+          <div className="">
+            <label className="block mb-4 font-semibold" htmlFor="salesAmount">
+              Jumlah penjualan
+            </label>
+            <TextInput
+              type="number"
+              value={stock}
+              onChange={(e) => setStock(e.target.value)}
+              min={0}
+              step={1}
+              className="w-44"
+              color={"gray"}
+            />
+          </div>
+          <div className="">
+            <label className="block mb-4 font-semibold" htmlFor="sampleSize">
+              Jumlah sampel acak
+            </label>
+            <TextInput
+              type="number"
+              value={sampleSize}
+              onChange={handleSampleSizeChange}
+              min={1}
+              step={1}
+              className="w-44"
+              color={"gray"}
+            />
+          </div>
+        </div>
+        <div className="flex flex-col items-center justify-center my-8 space-y-4">
+          <div className="">
+            <button
+              onClick={(e) => predictSales(e)}
+              className="px-4 py-2 text-white bg-blue-500 rounded-md"
+            >
+              Prediksi Penjualan
+            </button>
+          </div>
+          {finalPrediction !== null && (
+            <div className="">
+              <h3 className="text-lg font-bold">
+                Prediksi Penjualan: {finalPrediction.toFixed(2)}
+              </h3>
+            </div>
+          )}
+        </div>
+        <div>
+          <Timeline>
+            <Timeline.Item>
+              <Timeline.Point />
+              <Timeline.Content>
+                <Timeline.Title>Data Penjualan Obat</Timeline.Title>
+                <Accordion defaultOpen={true}>
+                  <Timeline.Body>
+                    {sales.map((sale, index) => (
+                      <div key={index}>
+                        <p>Diskon: {sale.isDiscount ? "Ya" : "Tidak"}</p>
+                        <p>Jumlah Penjualan: {sale.salesAmount}</p>
+                      </div>
+                    ))}
+                  </Timeline.Body>
+                </Accordion>
+              </Timeline.Content>
+            </Timeline.Item>
+            <Timeline.Item>
+              <Timeline.Point />
+              <Timeline.Content>
+                <Timeline.Title>Langkah Pertama</Timeline.Title>
+                <Accordion title="Sampel Acak">
+                  <Timeline.Body>
+                    {randomSamples.map((sample, sampleIndex) => (
+                      <div key={sampleIndex}>
+                        <h3 className="text-lg font-bold">
+                          Sampel Acak {sampleIndex + 1}
+                        </h3>
+                        {sample.map((sale, index) => (
+                          <div key={index}>
+                            <p>Diskon: {sale.isDiscount ? "Ya" : "Tidak"}</p>
+                            <p>Jumlah Penjualan: {sale.salesAmount}</p>
+                          </div>
+                        ))}
+                      </div>
+                    ))}
+                  </Timeline.Body>
+                </Accordion>
+              </Timeline.Content>
+            </Timeline.Item>
+            <Timeline.Item>
+              <Timeline.Point />
+              <Timeline.Content>
+                <Timeline.Title>Langkah Kedua</Timeline.Title>
+                <Accordion title="Menghitung Entropy dan Gain">
+                  <Timeline.Body>
+                    {samplesEntropyAndGain.map((sample, sampleIndex) => (
+                      <div key={sampleIndex}>
+                        <h3 className="text-lg font-bold">
+                          Sampel Acak {sampleIndex + 1}
+                        </h3>
+                        <p>Entropy: {sample.entropy.toFixed(4)}</p>
+                        <p>Gain Diskon: {sample.gainDiscount.toFixed(4)}</p>
+                        <p>
+                          Gain Jumlah Penjualan:{" "}
+                          {sample.gainSalesAmount.toFixed(4)}
+                        </p>
+                      </div>
+                    ))}
+                  </Timeline.Body>
+                </Accordion>
+              </Timeline.Content>
+            </Timeline.Item>
+            <Timeline.Item>
+              <Timeline.Point />
+              <Timeline.Content>
+                <Timeline.Title>Langkah Ketiga</Timeline.Title>
+                <Accordion title="Membuat Pohon Keputusan">
+                  <Timeline.Body className="flex flex-col items-center justify-center">
+                    <DecisionTree stock={thresholds} />
+                  </Timeline.Body>
+                </Accordion>
+              </Timeline.Content>
+            </Timeline.Item>
+            <Timeline.Item>
+              <Timeline.Point />
+              <Timeline.Content>
+                <Timeline.Title>Langkah Keempat</Timeline.Title>
+                <Accordion title="Melakukan Prediksi Tiap Sampel Acak">
+                  <Timeline.Body>
+                    {predictions.map((item, sampleIndex) => (
+                      <div key={sampleIndex}>
+                        <h3 className="text-lg font-bold">
+                          Prediksi Sampel Acak {sampleIndex + 1}
+                        </h3>
+                        <p>Prediksi: {item}</p>
+                      </div>
+                    ))}
+                  </Timeline.Body>
+                </Accordion>
+              </Timeline.Content>
+            </Timeline.Item>
+            <Timeline.Item>
+              <Timeline.Point />
+              <Timeline.Content>
+                <Timeline.Title>Langkah Kelima</Timeline.Title>
+                <Accordion title="Melakukan Prediksi Akhir">
+                  <Timeline.Body>
+                    <h3 className="text-lg font-bold">
+                      Prediksi Akhir:{" "}
+                      {finalPrediction !== null
+                        ? finalPrediction.toFixed(2)
+                        : "Belum dihitung"}
+                    </h3>
+                  </Timeline.Body>
+                </Accordion>
+              </Timeline.Content>
+            </Timeline.Item>
+          </Timeline>
+        </div>
       </div>
     </Layout>
   );
