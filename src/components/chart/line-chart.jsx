@@ -1,7 +1,7 @@
 import React from "react";
 import ReactApexChart from "react-apexcharts";
 
-const LineChart = ({ actual, wma }) => {
+const LineChart = ({ actual, rf, categories }) => {
   const chartData = {
     series: [
       {
@@ -9,8 +9,8 @@ const LineChart = ({ actual, wma }) => {
         data: actual,
       },
       {
-        name: "Penjualan Weight Moving Average",
-        data: wma,
+        name: "Random Forest",
+        data: rf,
       },
     ],
     options: {
@@ -37,13 +37,13 @@ const LineChart = ({ actual, wma }) => {
         curve: "smooth",
       },
       title: {
-        text: "Penjualan Alat Kesehatan",
+        text: "Penjualan Obat",
         align: "left",
       },
       grid: {
         borderColor: "#e7e7e7",
         row: {
-          colors: ["#f3f3f3", "transparent"], // takes an array which will be repeated on columns
+          colors: ["#f3f3f3", "transparent"],
           opacity: 0.5,
         },
       },
@@ -51,7 +51,7 @@ const LineChart = ({ actual, wma }) => {
         size: 1,
       },
       xaxis: {
-        categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"],
+        categories: categories,
         title: {
           text: "Month",
         },

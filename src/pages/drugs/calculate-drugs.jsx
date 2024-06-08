@@ -7,6 +7,8 @@ import ToastNotification from "../../components/toast/toast-notification";
 import { Select, TextInput, Timeline } from "flowbite-react";
 import DecisionTree from "../../components/decision-tree";
 import Accordion from "../../components/accordion";
+import LineChart from "../../components/chart/line-chart";
+import { changeNumberToMonth } from "../../service/helper";
 
 const CalculateDrugs = () => {
   const { id } = useParams();
@@ -20,7 +22,28 @@ const CalculateDrugs = () => {
   const [predictions, setPredictions] = useState([]);
   const [finalPrediction, setFinalPrediction] = useState(null);
   const [thresholds, setThresholds] = useState([]);
+  const [actual, setActual] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [rf, setRf] = useState([0, 0, 0, 0]);
 
+  useEffect(() => {
+    if (sales.length > 0) {
+      setActual(sales.map((sale) => sale.salesAmount));
+      setCategories(
+        sales.map((sale) => {
+          const month = changeNumberToMonth(sale.month);
+          const year = sale.year;
+          return `${month} ${year}`;
+        })
+      );
+    }
+  }, [sales]);
+
+  useEffect(() => {
+    if (finalPrediction) {
+      setRf(...rf, finalPrediction);
+    }
+  }, [finalPrediction]);
   useEffect(() => {
     const fetchData = async () => {
       const toastNotification = ToastNotification.loading("Memuat data...");
@@ -64,8 +87,16 @@ const CalculateDrugs = () => {
   };
 
   const handleSampleSizeChange = (event) => {
-    const newSize = parseInt(event.target.value);
-    setSampleSize(newSize);
+    if (event.target.value > 200) {
+      ToastNotification.error("Jumlah sampel tidak boleh lebih dari 200");
+      return;
+    } else if (event.target.value < 0) {
+      ToastNotification.error("Jumlah sampel tidak boleh kurang dari 0");
+      return;
+    } else {
+      const newSize = parseInt(event.target.value);
+      setSampleSize(newSize);
+    }
   };
 
   const calculateEntropy = (array) => {
@@ -124,7 +155,7 @@ const CalculateDrugs = () => {
 
   const predictSales = (e) => {
     e.preventDefault();
-    console.log(randomSamples);
+
     let temp = [];
     let predictions = randomSamples.map((sample) => {
       const filteredSales = sample.filter(
@@ -179,6 +210,7 @@ const CalculateDrugs = () => {
               value={stock}
               onChange={(e) => setStock(e.target.value)}
               min={0}
+              max={200}
               step={1}
               className="w-44"
               color={"gray"}
@@ -328,6 +360,9 @@ const CalculateDrugs = () => {
           </Timeline>
         </div>
       </div>
+      {finalPrediction && (
+        <LineChart actual={actual} rf={rf} categories={categories} />
+      )}
     </Layout>
   );
 };

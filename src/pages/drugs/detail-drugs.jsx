@@ -8,6 +8,7 @@ import FormCreateSales from "../../components/form/form-create-sales";
 import FormUpdateSales from "../../components/form/form-update-sales";
 import FormDeleteSales from "../../components/form/form-delete-sales";
 import { Button, Table } from "flowbite-react";
+import { changeNumberToMonth } from "../../service/helper";
 
 const DetailDrugs = () => {
   const { id } = useParams();
@@ -118,6 +119,8 @@ const DetailDrugs = () => {
         <Table hoverable={true}>
           <Table.Head>
             <Table.HeadCell>No</Table.HeadCell>
+            <Table.HeadCell>Bulan</Table.HeadCell>
+            <Table.HeadCell>Tahun</Table.HeadCell>
             <Table.HeadCell>Diskon</Table.HeadCell>
             <Table.HeadCell>Stok</Table.HeadCell>
             <Table.HeadCell>Penjualan</Table.HeadCell>
@@ -134,6 +137,8 @@ const DetailDrugs = () => {
                     <Table.Cell className="font-medium text-gray-900 whitespace-nowrap dark:text-white">
                       {startIndex + index + 1}
                     </Table.Cell>
+                    <Table.Cell>{changeNumberToMonth(sale.month)}</Table.Cell>
+                    <Table.Cell>{sale.year}</Table.Cell>
                     <Table.Cell>{sale.isDiscount ? "Ya" : "Tidak"}</Table.Cell>
                     <Table.Cell> {sale.stock}</Table.Cell>
                     <Table.Cell>{sale.salesAmount}</Table.Cell>
@@ -172,7 +177,7 @@ const DetailDrugs = () => {
           </Table.Body>
         </Table>
       </div>
-      <div className="flex justify-end mt-4 space-x-4">
+      <div className="flex items-center justify-end mt-4 space-x-4">
         <Button
           size={"xs"}
           color="blue"
@@ -194,6 +199,9 @@ const DetailDrugs = () => {
             />
           </svg>
         </Button>
+        <span className="text-sm font-semibold">
+          Halaman {currentPage} / {totalPages}
+        </span>
         <Button
           color={"blue"}
           size="xs"

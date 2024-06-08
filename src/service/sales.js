@@ -76,10 +76,16 @@ export async function getSalesByDrugsId(drugsId) {
       sales.push({ id: doc.id, ...doc.data() });
     });
 
-    // Sort by createdAt
-    const sortedSales = sales.sort((a, b) => {
-      return new Date(b.createdAt) - new Date(a.createdAt);
+    let sortedSales = sales.sort((a, b) => {
+      if (a.year === b.year) {
+        return a.month - b.month;
+      } else {
+        return a.year - b.year;
+      }
     });
+
+    sortedSales = sortedSales.reverse();
+
     return sortedSales;
   } catch (error) {
     throw error;

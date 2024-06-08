@@ -3,12 +3,16 @@ import { createSale } from "../../service/sales";
 import Loading from "../loading";
 import { Button, TextInput, Select } from "flowbite-react";
 import ToastNotification from "../toast/toast-notification";
+import { years, months } from "../../service/helper";
 
 const FormCreateSales = ({ fetchData, setOpenModal, id }) => {
   const [newSale, setNewSale] = useState({
     salesAmount: 0,
     stock: 0,
+    year: years[0],
+    month: 0,
     isDiscount: false,
+    createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   });
   const [isLoading, setIsLoading] = useState(false);
@@ -83,6 +87,51 @@ const FormCreateSales = ({ fetchData, setOpenModal, id }) => {
           onChange={handleChange}
           min={0}
         />
+      </div>
+      <div>
+        <label htmlFor="year" className="label">
+          Tahun
+        </label>
+        <Select
+          name="year"
+          id="year"
+          className="w-full input input-bordered"
+          value={newSale.year}
+          onChange={handleChange}
+        >
+          {years.map((year) => (
+            <option
+              className="w-full input input-bordered"
+              key={year}
+              value={year}
+            >
+              {year}
+            </option>
+          ))}
+        </Select>
+      </div>
+
+      <div>
+        <label htmlFor="month" className="label">
+          Bulan
+        </label>
+        <Select
+          name="month"
+          id="month"
+          className="w-full input input-bordered"
+          value={newSale.month}
+          onChange={handleChange}
+        >
+          {months.map((month) => (
+            <option
+              className="w-full input input-bordered"
+              key={month.id}
+              value={month.id}
+            >
+              {month.name}
+            </option>
+          ))}
+        </Select>
       </div>
 
       <div className="flex justify-end pt-2 space-x-4">
