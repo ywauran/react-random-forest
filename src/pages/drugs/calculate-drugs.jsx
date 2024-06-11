@@ -25,6 +25,7 @@ const CalculateDrugs = () => {
   const [actual, setActual] = useState([]);
   const [categories, setCategories] = useState([]);
   const [rf, setRf] = useState([0, 0, 0, 0]);
+  const [mse, setMse] = useState(null);
 
   useEffect(() => {
     if (sales.length > 0) {
@@ -40,10 +41,11 @@ const CalculateDrugs = () => {
   }, [sales]);
 
   useEffect(() => {
-    if (finalPrediction) {
-      setRf(...rf, finalPrediction);
+    if (finalPrediction !== null) {
+      setRf((prevRf) => [...prevRf, finalPrediction]);
     }
   }, [finalPrediction]);
+
   useEffect(() => {
     const fetchData = async () => {
       const toastNotification = ToastNotification.loading("Memuat data...");
@@ -53,10 +55,11 @@ const CalculateDrugs = () => {
         const salesData = await getSalesByDrugsId(id);
         setSales(salesData);
         ToastNotification.success("Berhasil mengambil data");
-        ToastNotification.dismiss(toastNotification);
       } catch (error) {
         console.error("Error fetching data:", error);
         ToastNotification.error("Gagal mengambil data");
+      } finally {
+        ToastNotification.dismiss(toastNotification);
       }
     };
 
@@ -64,12 +67,14 @@ const CalculateDrugs = () => {
   }, [id]);
 
   useEffect(() => {
-    const samples = generateBootstrapSample(sales, sampleSize);
-    setRandomSamples(samples);
-    const entropyAndGain = samples.map((sample) =>
-      calculateEntropyAndGain(sample)
-    );
-    setSamplesEntropyAndGain(entropyAndGain);
+    if (sales.length > 0) {
+      const samples = generateBootstrapSample(sales, sampleSize);
+      setRandomSamples(samples);
+      const entropyAndGain = samples.map((sample) =>
+        calculateEntropyAndGain(sample)
+      );
+      setSamplesEntropyAndGain(entropyAndGain);
+    }
   }, [sales, sampleSize]);
 
   const generateBootstrapSample = (array, size) => {
@@ -87,14 +92,12 @@ const CalculateDrugs = () => {
   };
 
   const handleSampleSizeChange = (event) => {
-    if (event.target.value > 200) {
+    const newSize = parseInt(event.target.value);
+    if (newSize > 200) {
       ToastNotification.error("Jumlah sampel tidak boleh lebih dari 200");
-      return;
-    } else if (event.target.value < 0) {
+    } else if (newSize < 0) {
       ToastNotification.error("Jumlah sampel tidak boleh kurang dari 0");
-      return;
     } else {
-      const newSize = parseInt(event.target.value);
       setSampleSize(newSize);
     }
   };
@@ -102,12 +105,11 @@ const CalculateDrugs = () => {
   const calculateEntropy = (array) => {
     const uniqueValues = [...new Set(array)];
     let entropy = 0;
-    for (let i = 0; i < uniqueValues.length; i++) {
-      const value = uniqueValues[i];
+    uniqueValues.forEach((value) => {
       const probability =
         array.filter((item) => item === value).length / array.length;
       entropy -= probability * Math.log2(probability);
-    }
+    });
     return entropy;
   };
 
@@ -164,19 +166,44 @@ const CalculateDrugs = () => {
       if (filteredSales.length === 0) return 0;
       const avgSalesAmount =
         filteredSales.reduce(
-          (sum, sale) => sum + parseInt(sale.salesAmount),
+          (sum, sale) => sum + parseInt(sale.salesAmount, 10),
           0
         ) / filteredSales.length;
       temp.push(avgSalesAmount);
       return avgSalesAmount;
     });
+
     setThresholds(temp);
-    console.log(temp);
     setPredictions(predictions);
 
     const avgPrediction =
       predictions.reduce((a, b) => a + b, 0) / predictions.length;
     setFinalPrediction(avgPrediction);
+
+    // Balik array actual dan potong array predictions dan actual ke panjang yang sama
+    const reversedActual = [...actual]
+      .reverse()
+      .map((value) => parseInt(value, 10));
+    const minLength = Math.min(predictions.length, reversedActual.length);
+    const trimmedPredictions = predictions.slice(0, minLength);
+    const trimmedActual = reversedActual.reverse().slice(0, minLength);
+    setActual(trimmedActual);
+    setPredictions(trimmedPredictions);
+    console.log(trimmedPredictions, trimmedActual);
+    const mseValue = calculateMse(trimmedPredictions, trimmedActual);
+
+    setMse(mseValue);
+  };
+
+  // Fungsi untuk menghitung MSE
+  const calculateMse = (predictions, actual) => {
+    const squaredErrors = predictions.map((pred, index) => {
+      const error = pred - actual[index];
+      return error * error;
+    });
+    const mse =
+      squaredErrors.reduce((sum, val) => sum + val, 0) / squaredErrors.length;
+    return mse;
   };
 
   return (
@@ -245,6 +272,11 @@ const CalculateDrugs = () => {
               <h3 className="text-lg font-bold">
                 Prediksi Penjualan: {finalPrediction.toFixed(2)}
               </h3>
+              {mse !== null && (
+                <p className="text-lg font-bold">
+                  MSE: {mse !== null ? Math.floor(mse / 100).toFixed(1) : "N/A"}
+                </p>
+              )}
             </div>
           )}
         </div>
@@ -334,7 +366,9 @@ const CalculateDrugs = () => {
                         <h3 className="text-lg font-bold">
                           Prediksi Sampel Acak {sampleIndex + 1}
                         </h3>
-                        <p>Prediksi: {item}</p>
+                        <p className="text-base font-semibold">
+                          Prediksi: {item}
+                        </p>
                       </div>
                     ))}
                   </Timeline.Body>
@@ -353,6 +387,10 @@ const CalculateDrugs = () => {
                         ? finalPrediction.toFixed(2)
                         : "Belum dihitung"}
                     </h3>
+                    <p>
+                      Nilai MSE:{" "}
+                      {mse !== null ? Math.floor(mse / 100).toFixed(1) : "N/A"}
+                    </p>
                   </Timeline.Body>
                 </Accordion>
               </Timeline.Content>
@@ -360,7 +398,8 @@ const CalculateDrugs = () => {
           </Timeline>
         </div>
       </div>
-      {finalPrediction && (
+
+      {finalPrediction !== null && (
         <LineChart actual={actual} rf={rf} categories={categories} />
       )}
     </Layout>

@@ -2,12 +2,15 @@ import React, { useEffect, useState } from "react";
 import { updateSale, getSaleById } from "../../service/sales";
 import ToastNotification from "../toast/toast-notification";
 import { Button, Select, Spinner, TextInput } from "flowbite-react";
+import { years, months } from "../../service/helper";
 
 const FormUpdateSale = ({ fetchData, setOpenModal, id }) => {
   const [newSale, setNewSale] = useState({
     salesAmount: 0,
     isDiscount: false,
     stock: 0,
+    year: years[0],
+    month: months[0].id,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   });
@@ -96,6 +99,46 @@ const FormUpdateSale = ({ fetchData, setOpenModal, id }) => {
           value={newSale.salesAmount}
           onChange={handleChange}
         />
+      </div>
+      <div>
+        <label htmlFor="year" className="label">
+          Tahun
+        </label>
+        <Select
+          name="year"
+          id="year"
+          className="w-full input input-bordered"
+          value={newSale.year}
+          onChange={handleChange}
+        >
+          {years.map((year) => (
+            <option
+              className="w-full input input-bordered"
+              key={year}
+              value={year}
+            >
+              {year}
+            </option>
+          ))}
+        </Select>
+      </div>
+      <div>
+        <label htmlFor="month" className="label">
+          Bulan
+        </label>
+        <Select
+          name="month"
+          id="month"
+          className="w-full input input-bordered"
+          value={newSale.month}
+          onChange={handleChange}
+        >
+          {months.map(({ id, name }) => (
+            <option className="w-full input input-bordered" key={id} value={id}>
+              {name}
+            </option>
+          ))}
+        </Select>
       </div>
       <div className="flex justify-end pt-2 space-x-4">
         <button onClick={() => setOpenModal(false)} color="gray">
