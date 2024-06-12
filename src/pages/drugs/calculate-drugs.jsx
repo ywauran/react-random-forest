@@ -398,10 +398,10 @@ const CalculateDrugs = () => {
           </Timeline>
         </div>
       </div>
-
+      {/* 
       {finalPrediction !== null && (
         <LineChart actual={actual} rf={rf} categories={categories} />
-      )}
+      )} */}
     </Layout>
   );
 };
