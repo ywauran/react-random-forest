@@ -102,6 +102,18 @@ const CalculateDrugs = () => {
     }
   };
 
+  const handleStockChange = (event) => {
+    const newStock = parseInt(event.target.value);
+
+    if (newStock > 5000) {
+      ToastNotification.error("Jumlah stok tidak boleh lebih dari 5000");
+    } else if (newStock < 0) {
+      ToastNotification.error("Jumlah stok tidak boleh kurang dari 0");
+    } else {
+      setStock(newStock);
+    }
+  };
+
   const calculateEntropy = (array) => {
     const uniqueValues = [...new Set(array)];
     let entropy = 0;
@@ -229,15 +241,14 @@ const CalculateDrugs = () => {
           </div>
 
           <div className="">
-            <label className="block mb-4 font-semibold" htmlFor="salesAmount">
-              Jumlah penjualan
+            <label className="block mb-4 font-semibold" htmlFor="stock">
+              Stok tersedia
             </label>
             <TextInput
               type="number"
               value={stock}
-              onChange={(e) => setStock(e.target.value)}
-              min={0}
-              max={200}
+              onChange={handleStockChange}
+              min={1}
               step={1}
               className="w-44"
               color={"gray"}
@@ -274,7 +285,7 @@ const CalculateDrugs = () => {
               </h3>
               {mse !== null && (
                 <p className="text-lg font-bold">
-                  MSE: {mse !== null ? Math.floor(mse / 100).toFixed(1) : "N/A"}
+                  MSE: {mse !== null ? (mse / 100).toFixed(0) : "N/A"}
                 </p>
               )}
             </div>
