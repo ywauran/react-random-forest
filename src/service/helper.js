@@ -48,7 +48,7 @@ export const months = [
     name: "November",
   },
   {
-    id: 12,
+    id: 11,
     name: "Desember",
   },
 ];
