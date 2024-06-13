@@ -137,7 +137,7 @@ const DetailDrugs = () => {
                     <Table.Cell className="font-medium text-gray-900 whitespace-nowrap dark:text-white">
                       {startIndex + index + 1}
                     </Table.Cell>
-                    <Table.Cell>{sale.month}</Table.Cell>
+                    <Table.Cell>{changeNumberToMonth(sale.month)}</Table.Cell>
                     <Table.Cell>{sale.year}</Table.Cell>
                     <Table.Cell>{sale.isDiscount ? "Ya" : "Tidak"}</Table.Cell>
                     <Table.Cell> {sale.stock}</Table.Cell>
