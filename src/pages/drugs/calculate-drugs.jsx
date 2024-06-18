@@ -202,7 +202,12 @@ const CalculateDrugs = () => {
     setActual(trimmedActual);
     setPredictions(trimmedPredictions);
     console.log(trimmedPredictions, trimmedActual);
-    const mseValue = calculateMse(trimmedPredictions, trimmedActual);
+    let mseValue = calculateMse(trimmedPredictions, trimmedActual);
+    let digitDepan = Math.floor(Math.log10(mseValue)) + 1;
+
+    mseValue = mseValue / Math.pow(10, digitDepan - 1);
+
+    mseValue = parseFloat(mseValue.toFixed(3));
 
     setMse(mseValue);
   };
@@ -283,11 +288,7 @@ const CalculateDrugs = () => {
               <h3 className="text-lg font-bold">
                 Prediksi Penjualan: {finalPrediction.toFixed(2)}
               </h3>
-              {mse !== null && (
-                <p className="text-lg font-bold">
-                  MSE: {mse !== null ? (mse / 100).toFixed(0) : "N/A"}
-                </p>
-              )}
+              <p className="font-bold">MSE: {mse}</p>
             </div>
           )}
         </div>
@@ -398,10 +399,7 @@ const CalculateDrugs = () => {
                         ? finalPrediction.toFixed(2)
                         : "Belum dihitung"}
                     </h3>
-                    <p>
-                      Nilai MSE:{" "}
-                      {mse !== null ? Math.floor(mse / 100).toFixed(1) : "N/A"}
-                    </p>
+                    <p className="text-base font-semibold">Nilai MSE: {mse}</p>
                   </Timeline.Body>
                 </Accordion>
               </Timeline.Content>
