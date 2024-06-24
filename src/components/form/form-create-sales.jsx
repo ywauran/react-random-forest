@@ -28,16 +28,20 @@ const FormCreateSales = ({ fetchData, setOpenModal, id }) => {
 
   const handleCreate = async () => {
     setIsLoading(true);
-    try {
-      await createSale(newSale, id);
-      fetchData();
-      setIsLoading(false);
-      setOpenModal(false);
-      ToastNotification.success("Penjualan berhasil ditambahkan");
-    } catch (error) {
-      console.error("Error creating Sale:", error.message);
-      ToastNotification.error("Penjualan gagal ditambahkan");
-      setIsLoading(false);
+    if (newSale.stock < newSale.salesAmount) {
+      ToastNotification.error("Stok tidak bisa kurang dari penjualan");
+    } else {
+      try {
+        await createSale(newSale, id);
+        fetchData();
+        setIsLoading(false);
+        setOpenModal(false);
+        ToastNotification.success("Penjualan berhasil ditambahkan");
+      } catch (error) {
+        console.error("Error creating Sale:", error.message);
+        ToastNotification.error("Penjualan gagal ditambahkan");
+        setIsLoading(false);
+      }
     }
   };
 

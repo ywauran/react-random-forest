@@ -203,9 +203,9 @@ const CalculateDrugs = () => {
     setPredictions(trimmedPredictions);
     console.log(trimmedPredictions, trimmedActual);
     let mseValue = calculateMse(trimmedPredictions, trimmedActual);
-    let digitDepan = Math.floor(Math.log10(mseValue)) + 1;
+    let tempMse = Math.floor(Math.log10(mseValue)) + 1;
 
-    mseValue = mseValue / Math.pow(10, digitDepan - 1);
+    mseValue = mseValue / Math.pow(10, tempMse - 1);
 
     mseValue = parseFloat(mseValue.toFixed(3));
 
@@ -286,7 +286,7 @@ const CalculateDrugs = () => {
           {finalPrediction !== null && (
             <div className="">
               <h3 className="text-lg font-bold">
-                Prediksi Penjualan: {finalPrediction.toFixed(2)}
+                Prediksi Penjualan: {finalPrediction.toFixed(0)} pcs
               </h3>
               <p className="font-bold">MSE: {mse}</p>
             </div>

@@ -107,12 +107,18 @@ const DetailDrugs = () => {
         <Button onClick={() => setIsModalCreate(true)} color={"blue"}>
           Tambah
         </Button>
-        {sales.length > 3 && (
+        {sales.length > 3 ? (
           <Button color={"white"} className="border-2 btn btn-outline">
             <Link to={`/drugs/calculate/${id}`} className="btn">
               Lihat Perhitungan
             </Link>
           </Button>
+        ) : (
+          <>
+            <p className="font-semibold text-red-500">
+              Obat harus memiliki minimal 3 penjualan
+            </p>
+          </>
         )}
       </div>
       <div className="overflow-x-auto shadow">
